@@ -1,7 +1,9 @@
 import pygame
 import os
-pygame.font.init()
+pygame.mixer.pre_init(frequency = 44100, size = 16, channels = 1, buffer = 2048)
 pygame.mixer.init()
+pygame.font.init()
+
 
 WIDTH, HEIGHT = 900, 500
 BORDER_TOP_POSITION = 0
@@ -10,8 +12,8 @@ BORDER = pygame.Rect(WIDTH/2 - BORDER_WIDTH/2, BORDER_TOP_POSITION, BORDER_WIDTH
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("First PyGame!")
 
-#BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Grenade+1.mp3')) mp3 files corrupted
-#BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Gun+Silencer.mp3'))
+BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets','Hit_sound.wav'))
+BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets','Fire_sound.wav'))
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -131,18 +133,20 @@ def main():
                 if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(yellow.x + yellow.width, yellow.y + yellow.height/2, bullet_width, bullet_height)
                     yellow_bullets.append(bullet)
-                    #BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.play()
 
                 if event.key == pygame.K_RCTRL and len(red_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(red.x, red.y + red.height/2, bullet_width, bullet_height)
                     red_bullets.append(bullet)
-                    #BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.play()
 
             if event.type == RED_HIT:
                 red_health -= 1
+                BULLET_HIT_SOUND.play()
 
             if event.type == YELLOW_HIT:
                 yellow_health -= 1
+                BULLET_HIT_SOUND.play()
 
         winner_text =""
         if red_health <= 0:
